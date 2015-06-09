@@ -11,7 +11,7 @@ Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the insp
 
 This project is meant to be as turn-key as possible. Therefore, the only thing you need to do is provide a RPM for Oracle's JRE in resources/ and update scripts/common.sh so `JRE_RPM` is set correctly, and then run `vagrant up`. 
 
-The first time you run the script, a lot of very large tarballs need to be fetched. They will be cached to resources/tmp/ and the cached files will be used if you provision (`vagrant provision or `vagrant destroy -f && vagrant up`) the VMs again.
+The first time you run the script, a lot of very large tarballs need to be fetched. They will be cached to resources/tmp/ and the cached files will be used if you provision (`vagrant provision` or `vagrant destroy -f && vagrant up`) the VMs again.
 
 ## Virtual Machines
 
