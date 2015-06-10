@@ -10,12 +10,10 @@ while getopts r:t: option; do
 done
 
 function installHadoop {
-    HADOOP_TARBALL="/tmp/${HADOOP_VERSION}.tar.gz"
-    HADOOP_URL="http://mirror.metrocast.net/apache/hadoop/common/${HADOOP_VERSION}/${HADOOP_VERSION}.tar.gz"
     
-    downloadFile $HADOOP_TARBALL $HADOOP_URL
+    downloadApacheFile hadoop/common $HADOOP_VERSION "${HADOOP_VERSION}.tar.gz"
 
-    tar -oxzf $HADOOP_TARBALL -C /opt
+    tar -oxzf $TARBALL -C /opt
     safeSymLink "/opt/${HADOOP_VERSION}/" /opt/hadoop
 
     mkdir -p /var/lib/hadoop/hdfs/namenode

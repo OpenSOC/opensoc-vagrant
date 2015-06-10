@@ -7,20 +7,28 @@ KAFKA_SCALA_VERSION=2.9.2
 KAFKA_VERSION_NUM=0.8.1.1
 KAFKA_VERSION="kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION_NUM}"
 STORM_VERSION=apache-storm-0.9.4
+HBASE_VERSION_NUM=0.98.12.1
+HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
 
 # So we dont need to pass in i to the scripts
 NODE_NUMBER=`hostname | tr -d node`
 
-function downloadFile {
+function downloadApacheFile {
 
-    cached_file="/vagrant/resources${1}"
+    project="${1}"
+    version="${2}"
+    filename="${3}"
+
+    closest_url=`python /vagrant/scripts/closest-mirror.py ${project} -v ${version} -f ${filename}`
+    cached_file="/vagrant/resources/tmp/${filename}"
+
     if [ ! -e $cached_file ]; then
-        echo "Downloading ${cached_file} from ${2}"
+        echo "Downloading ${filename} from ${closest_url} to ${cached_file}"
         echo "This will take some time. Please be patient..."
-        wget -nv -O $cached_file $2
+        wget -nv -O $cached_file $closest_url
     fi
 
-    cp $cached_file $1
+    TARBALL=$cached_file
 }
 
 function join {
@@ -30,6 +38,10 @@ function join {
 function generateZkString {
     # Yes its ugly, but so is bash :)
     ZK_STRING=`python -c "print ','.join([ 'node{0}:2181'.format(x) for x in range(2,${1}+1)])"`
+}
+
+function generateZkStringNoPorts {
+    ZK_STRING_NOPORTS=`python -c "print ','.join([ 'node{0}'.format(x) for x in range(2,${1}+1)])"`
 }
 
 function safeSymLink {

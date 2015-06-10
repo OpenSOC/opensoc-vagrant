@@ -9,12 +9,9 @@ while getopts t: option; do
 done
 
 function installKafka {
-    KAFKA_TARBALL="/tmp/${KAFKA_VERSION}.tgz"
-    KAFKA_URL="http://apache.mirrors.lucidnetworks.net/kafka/${KAFKA_VERSION_NUM}/${KAFKA_VERSION}.tgz"
+    downloadApacheFile kafka ${KAFKA_VERSION_NUM} "${KAFKA_VERSION}.tgz"
 
-    downloadFile $KAFKA_TARBALL $KAFKA_URL
-
-    tar -oxzf $KAFKA_TARBALL -C /opt
+    tar -oxzf $TARBALL -C /opt
     safeSymLink "/opt/${KAFKA_VERSION}/" /opt/kafka 
 
     mkdir -p /var/lib/kafka-logs
@@ -22,6 +19,7 @@ function installKafka {
 }
 
 function configureKafka {
+    echo "Configuring Kafka"
     # copy over config with static properties
     cp /vagrant/resources/kafka/server.properties /opt/kafka/config/
 

@@ -24,13 +24,14 @@ function writeHostFile {
     done
 }
 
-function installSupervisorD {
+function installDependencies {
     echo "Installing Supervisor"
     yum install -y epel-release
     yum install -y python-pip
 
     pip install supervisor
-    
+    pip install argparse
+
     cp /vagrant/resources/supervisord.conf /etc/supervisord.conf
 
     mkdir -p /etc/supervisor.d
@@ -38,4 +39,4 @@ function installSupervisorD {
 }
 disableFirewall
 writeHostFile
-installSupervisorD
+installDependencies

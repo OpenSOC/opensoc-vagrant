@@ -1,3 +1,4 @@
 .vagrant/*
 resources/jre*
 resources/tmp/*
+.ssh_config

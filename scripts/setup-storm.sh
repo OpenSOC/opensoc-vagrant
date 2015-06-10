@@ -12,12 +12,9 @@ done
 
 
 function installStorm {
-    STORM_TARBALL="/tmp/${STORM_VERSION}.tar.gz"
-    STORM_URL="http://mirror.reverse.net/pub/apache/storm/${STORM_VERSION}/${STORM_VERSION}.tar.gz"
+    downloadApacheFile storm ${STORM_VERSION} "${STORM_VERSION}.tar.gz"
 
-    downloadFile $STORM_TARBALL $STORM_URL
-
-    tar -oxzf $STORM_TARBALL -C /opt
+    tar -oxzf $TARBALL -C /opt
     safeSymLink "/opt/${STORM_VERSION}" /opt/storm
 
     mkdir -p /var/log/storm

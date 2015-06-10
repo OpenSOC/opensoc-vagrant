@@ -9,12 +9,9 @@ while getopts t: option; do
 done
 
 function installZookeeper {
-    ZOOKEEPER_TARBALL="/tmp/${ZOOKEEPER_VERSION}.tar.gz"
-    ZOOKEEPER_URL="http://apache.mirrors.lucidnetworks.net/zookeeper/${ZOOKEEPER_VERSION}/${ZOOKEEPER_VERSION}.tar.gz"
+    downloadApacheFile zookeeper ${ZOOKEEPER_VERSION} "${ZOOKEEPER_VERSION}.tar.gz"
 
-    downloadFile $ZOOKEEPER_TARBALL $ZOOKEEPER_URL
-
-    tar -oxzf $ZOOKEEPER_TARBALL -C /opt
+    tar -oxzf $TARBALL -C /opt
     safeSymLink "/opt/${ZOOKEEPER_VERSION}/" /opt/zookeeper
 
     mkdir -p /var/lib/zookeeper

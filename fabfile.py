@@ -38,9 +38,11 @@ def postsetup():
     execute(format_namenode)
     execute(supervisorctl_start, 'namenode', host='node1')
     execute(supervisorctl_start, 'resourcemanager', host='node1')
+    execute(supervisorctl_start, 'master', host='node1')
     for x in range(2,total_nodes+1):
         execute(supervisorctl_start, 'datanode', host='node{0}'.format(x))
         execute(supervisorctl_start, 'nodemanager', host='node{0}'.format(x))
+        execute(supervisorctl_start, 'regionserver', host='node{0}'.format(x))
 
 def supervisorctl_reread_update():
     sudo('supervisorctl reread')

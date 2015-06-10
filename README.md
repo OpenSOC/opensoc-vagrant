@@ -7,7 +7,7 @@ A collection of shell scripts and a Vagrant file for building an OpenSOC cluster
 Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the inspiration for this. This project is heavily influenced by that one.
 
 
-## Running the clsuter
+## Running the cluster
 
 This project is meant to be as turn-key as possible. However, there are a couple things that need to be done besides running `vagrant up` before you can start using the cluster. At a high level they are:
 
@@ -16,7 +16,9 @@ This project is meant to be as turn-key as possible. However, there are a couple
 * Format namenode for HDFS
 * Start HDFS services
 
-For convenience, this project ships with a fabfile that handles all of the setup tasks that must happen after running `vagrant up`. To run these tasks run the fabric task "postsetup" (`fab postsetup`)
+For convenience, this project ships with a fabfile that handles all of the setup tasks that must happen after running `vagrant up`. To run these tasks run the fabric tasks "vagrant" and "postsetup" together (`fab vagrant postsetup`). 
+
+The "vagrant" fabric task preps the fabric environment to work with the VM's, and most of not all of the other tasks depend on it. So always run it along side the target fabric task.
 
 ## Caching Tarballs
 
@@ -42,6 +44,7 @@ By default, 4 VMs will be created. They are named node1, node2, node3, and node4
 Some service's UIs are forwarded to localhost for ease of use. You can find the following services forwarded by default:
 
 * HDFS - localhost:50070 -> node1:50070
+* Hbase - localhost:60010 -> node1:60010
 * Storm UI - localhost:8080 -> node1:8080
 
 ## Progress
