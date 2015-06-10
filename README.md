@@ -32,12 +32,16 @@ By default, 4 VMs will be created. They are named node1, node2, node3, and node4
 * node1
   * HDFS Namenode
   * Yarn Resourcemanager
+  * Storm Nimbus and UI
+  * HBase Master
 
 * node2-4
   * Kafka Broker
   * Zookeeper
   * HDFS Datanode
   * YARN Nodemanager
+  * Storm Supervisor
+  * HBase Regionserver
 
 ## Port Forwarding
 
@@ -56,7 +60,7 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * HDFS/Yarn - DONE
 * Kafka - DONE 
 * Storm - DONE
-* Hbase
+* Hbase - DONE
 * Hive
 * Elasticsearch
 * OpenSOC UI
