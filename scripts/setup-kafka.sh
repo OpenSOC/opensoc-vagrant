@@ -15,9 +15,10 @@ function installKafka {
     downloadFile $KAFKA_TARBALL $KAFKA_URL
 
     tar -oxzf $KAFKA_TARBALL -C /opt
-    ln -f -s "/opt/${KAFKA_VERSION}" /opt/kafka
+    safeSymLink "/opt/${KAFKA_VERSION}/" /opt/kafka 
 
     mkdir -p /var/lib/kafka-logs
+    mkdir -p /var/log/kafka
 }
 
 function configureKafka {
@@ -31,15 +32,10 @@ function configureKafka {
 
     echo "zookeeper.connect=${ZK_STRING}" >> /opt/kafka/config/server.properties
 
+    cp /vagrant/resources/kafka/supervisor-kafka.conf /etc/supervisor.d/kakfa.conf
 }
 
-function startKafka {
 
-    echo "Starting Kafka"
-    cd /opt/kafka; bin/kafka-server-start.sh config/server.properties &
-
-}
 echo "Setting up Kafka"
 installKafka
 configureKafka
-startKafka

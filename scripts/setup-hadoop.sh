@@ -2,9 +2,10 @@
 
 source "/vagrant/scripts/common.sh"
 
-while getopts t: option; do
+while getopts r:t: option; do
     case $option in
         t) TOTAL_NODES=$OPTARG;;
+        r) ROLE=$OPTARG;;
     esac
 done
 
@@ -15,18 +16,18 @@ function installHadoop {
     downloadFile $HADOOP_TARBALL $HADOOP_URL
 
     tar -oxzf $HADOOP_TARBALL -C /opt
-
-    ln -f -s "/opt/${HADOOP_VERSION}" /opt/hadoop
+    safeSymLink "/opt/${HADOOP_VERSION}/" /opt/hadoop
 
     mkdir -p /var/lib/hadoop/hdfs/namenode
     mkdir -p /var/lib/hadoop/hdfs/datanode
+    mkdir -p /var/log/hadoop
 }
 
 function configureHadoop {
     HADOOP_RESOURCE_DIR=/vagrant/resources/hadoop
-    for file in `ls ${HADOOP_RESOURCE_DIR}`; do
+    for file in `ls ${HADOOP_RESOURCE_DIR}/*.xml`; do
         echo "Copying ${file}"
-        cp "${HADOOP_RESOURCE_DIR}/${file}" /opt/hadoop/etc/hadoop
+        cp $file /opt/hadoop/etc/hadoop
     done
 
     echo "Setting slaves file"
@@ -35,6 +36,23 @@ function configureHadoop {
     done
 }
 
+function configureNameNode {
+    echo "Copying over Supervisor config for namenode and resourcemanager"
+    cp /vagrant/resources/hadoop/supervisor-namenode.conf /etc/supervisor.d/namenode.conf
+    cp /vagrant/resources/hadoop/supervisor-resourcemanager.conf /etc/supervisor.d/resourcemanager.conf
+}
+
+function configureDataNode {
+    echo "Copying over Supervisor config for datenode"
+    cp /vagrant/resources/hadoop/supervisor-datanode.conf /etc/supervisor.d/datanode.conf
+}
+
 echo "Setting up Hadoop"
 installHadoop
 configureHadoop
+
+if [ "${ROLE}" == "namenode" ]; then
+    configureNameNode
+elif [ "${ROLE}" == "datanode" ]; then
+    configureDataNode
+fi

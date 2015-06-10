@@ -23,20 +23,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             node.vm.provision "shell", path: "scripts/setup-java.sh"
 
-            node.vm.provision "shell" do |s|
-                s.path = "scripts/setup-hadoop.sh"
-                s.args = "-t #{numNodes}"
-            end
-
             if i == 1
                 # namenode
                 node.vm.provision "shell" do |s|
-                    s.path = "scripts/init-hadoop.sh"
-                    s.args = "-r namenode"
+                    s.path = "scripts/setup-hadoop.sh"
+                    s.args = "-r namenode -t #{numNodes}"
                 end
                 node.vm.network "forwarded_port", guest: 50070, host: 50070
                 # storm nimbus
                 # storm ui
+                node.vm.provision "shell" do |s|
+                    s.path = "scripts/setup-storm.sh"
+                    s.args = "-r nimbus -t #{numNodes}"
+                end
+                node.vm.network "forwarded_port", guest: 8080, host: 8080
                 # hbase master
             else
                 # zookeeper
@@ -46,8 +46,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 end
                 # datanode
                 node.vm.provision "shell" do |s|
-                    s.path = "scripts/init-hadoop.sh"
-                    s.args = "-r datanode"
+                    s.path = "scripts/setup-hadoop.sh"
+                    s.args = "-r datanode -t #{numNodes}"
                 end
                 # hbase regionserver
                 # kafka broker
@@ -56,9 +56,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-t #{numNodes}"
                 end
                 # storm supervisor
+                node.vm.provision "shell" do |s|
+                    s.path = "scripts/setup-storm.sh"
+                    s.args = "-r supervisor -t #{numNodes}"
+                end
                 # elasticsearch
-                # solr
+                # reload supervisord
             end
+
+            #After everything is provisioned, start Supervisor
+            node.vm.provision "shell", inline: "pgrep supervisord || supervisord -c /etc/supervisord.conf"
         end
     end
 end

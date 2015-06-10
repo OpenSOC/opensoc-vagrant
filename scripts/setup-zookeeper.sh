@@ -15,7 +15,7 @@ function installZookeeper {
     downloadFile $ZOOKEEPER_TARBALL $ZOOKEEPER_URL
 
     tar -oxzf $ZOOKEEPER_TARBALL -C /opt
-    ln -f -s "/opt/${ZOOKEEPER_VERSION}" /opt/zookeeper
+    safeSymLink "/opt/${ZOOKEEPER_VERSION}/" /opt/zookeeper
 
     mkdir -p /var/lib/zookeeper
     mkdir -p /var/log/zookeeper
@@ -43,21 +43,11 @@ function configureZookeeper {
     for i in $(seq 1 $TOTAL_NODES); do
         echo "server.${i}=node${i}:2888:3888" >> /opt/zookeeper/conf/zoo.cfg
     done
-}
 
-function startZookeeper {
-    /opt/zookeeper/bin/zkServer.sh status
-    
-    if [ $? -eq 0 ]; then
-        echo "Zookeeper already running"
-    else
-        echo "Starting Zookeeper"
-        /opt/zookeeper/bin/zkServer.sh start
-    fi
-}
+    cp /vagrant/resources/zookeeper/supervisor-zookeeper.conf /etc/supervisor.d/zookeeper.conf
+} 
 
 echo "Setting up Zookeeper"
 
 installZookeeper
 configureZookeeper
-startZookeeper
