@@ -61,7 +61,7 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * Kafka - DONE 
 * Storm - DONE
 * Hbase - DONE
-* Hive
+* Hive - DONE
 * Elasticsearch
 * OpenSOC UI
 * OpenSOC Storm Topologies

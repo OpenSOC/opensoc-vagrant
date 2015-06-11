@@ -45,6 +45,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-r master -t #{numNodes}"
                 end
                 node.vm.network "forwarded_port", guest: 60010, host: 60010
+
+                # hive
+                node.vm.provision "shell" do |s|
+                    s.path = "scripts/setup-hive.sh"
+                end
             else
                 # zookeeper
                 node.vm.provision "shell" do |s|

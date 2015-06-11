@@ -9,6 +9,7 @@ KAFKA_VERSION="kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION_NUM}"
 STORM_VERSION=apache-storm-0.9.4
 HBASE_VERSION_NUM=0.98.12.1
 HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
+HIVE_VERSION=hive-1.2.0
 
 # So we dont need to pass in i to the scripts
 NODE_NUMBER=`hostname | tr -d node`
