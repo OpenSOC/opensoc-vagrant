@@ -30,6 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-r namenode -t #{numNodes}"
                 end
                 node.vm.network "forwarded_port", guest: 50070, host: 50070
+                node.vm.network "forwarded_port", guest: 8088, host:8088
 
                 # storm nimbus
                 node.vm.provision "shell" do |s|
@@ -75,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             #After everything is provisioned, start Supervisor
-            node.vm.provision "shell", inline: "pgrep supervisord || supervisord -c /etc/supervisord.conf"
+            node.vm.provision "shell", inline: "pgrep supervisord || start supervisor"
         end
     end
 end
