@@ -19,6 +19,7 @@ function installHadoop {
     mkdir -p /var/lib/hadoop/hdfs/namenode
     mkdir -p /var/lib/hadoop/hdfs/datanode
     mkdir -p /var/log/hadoop
+    mkdir -p /opt/hadoop/logs
 }
 
 function configureHadoop {

@@ -33,6 +33,7 @@ function installDependencies {
     pip install argparse
 
     cp /vagrant/resources/supervisord.conf /etc/supervisord.conf
+    cp /vagrant/resources/upstart-supervisor.conf /etc/init/supervisor.conf
 
     mkdir -p /etc/supervisor.d
     mkdir -p /var/log/supervisor

@@ -50,3 +50,9 @@ def supervisorctl_reread_update():
 
 def update_supervisor():
     execute(supervisorctl_reread_update, hosts=['node{0}'.format(x) for x in range(1,total_nodes+1)])
+
+def supervisorctl_status():
+    sudo('supervisorctl status')
+
+def status():
+    execute(supervisorctl_status, hosts=['node{0}'.format(x) for x in range(1,total_nodes+1)])
