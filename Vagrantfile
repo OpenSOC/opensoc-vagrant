@@ -50,6 +50,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.provision "shell" do |s|
                     s.path = "scripts/setup-hive.sh"
                 end
+
+                node.vm.provision "shell" do |s|
+                    s.path = "scripts/setup-elasticsearch.sh"
+                    s.args = "-c"
+                end
+                node.vm.network "forwarded_port", guest: 9200, host:9200
             else
                 # zookeeper
                 node.vm.provision "shell" do |s|
@@ -77,6 +83,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-r supervisor -t #{numNodes}"
                 end
                 # elasticsearch
+                node.vm.provision "shell", path: "scripts/setup-elasticsearch.sh"
                 # reload supervisord
             end
 

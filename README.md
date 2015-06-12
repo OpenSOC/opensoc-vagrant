@@ -50,6 +50,7 @@ Some service's UIs are forwarded to localhost for ease of use. You can find the 
 * HDFS - localhost:50070 -> node1:50070
 * Hbase - localhost:60010 -> node1:60010
 * Storm UI - localhost:8080 -> node1:8080
+* Elasticsearch - localhost:9200 -> node1:9200
 
 ## Progress
 
@@ -62,7 +63,7 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * Storm - DONE
 * Hbase - DONE
 * Hive - DONE
-* Elasticsearch
+* Elasticsearch - DONE
 * OpenSOC UI
 * OpenSOC Storm Topologies
 

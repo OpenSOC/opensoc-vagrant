@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JRE_RPM=jre-7u45-linux-x64.rpm
+JRE_RPM=jre-7u79-linux-x64.rpm
 HADOOP_VERSION=hadoop-2.6.0
 ZOOKEEPER_VERSION=zookeeper-3.4.6
 KAFKA_SCALA_VERSION=2.9.2
@@ -10,9 +10,27 @@ STORM_VERSION=apache-storm-0.9.4
 HBASE_VERSION_NUM=0.98.12.1
 HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
 HIVE_VERSION=hive-1.2.0
+ES_VERSION=1.5.2
 
 # So we dont need to pass in i to the scripts
 NODE_NUMBER=`hostname | tr -d node`
+
+
+function downloadFile {
+    
+    url="${1}"
+    filename="${2}"
+
+    cached_file="/vagrant/resources/tmp/${filename}"
+
+    if [ ! -e $cached_file ]; then
+        echo "Downloading ${filename} from ${url} to ${cached_file}"
+        echo "This will take some time. Please be patient..."
+        wget -nv -O $cached_file $url
+    fi
+
+    TARBALL=$cached_file
+}
 
 function downloadApacheFile {
 
@@ -21,15 +39,8 @@ function downloadApacheFile {
     filename="${3}"
 
     closest_url=`python /vagrant/scripts/closest-mirror.py ${project} -v ${version} -f ${filename}`
-    cached_file="/vagrant/resources/tmp/${filename}"
 
-    if [ ! -e $cached_file ]; then
-        echo "Downloading ${filename} from ${closest_url} to ${cached_file}"
-        echo "This will take some time. Please be patient..."
-        wget -nv -O $cached_file $closest_url
-    fi
-
-    TARBALL=$cached_file
+    downloadFile $closest_url $filename
 }
 
 function join {
