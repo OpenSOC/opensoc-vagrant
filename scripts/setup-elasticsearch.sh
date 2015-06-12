@@ -2,9 +2,10 @@
 
 source "/vagrant/scripts/common.sh"
 
-while getopts c option; do
+while getopts ci: option; do
     case $option in
         c) ES_CLIENT=yes;;
+        i) IP_ADDR=$OPTARG;;
     esac
 done
 
@@ -25,10 +26,10 @@ function configureElasticsearch {
     hostname=`hostname -f`
     if [ -z "${ES_CLIENT}" ]; then
         echo "Configuring elasticsearch as a normal node"
-        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch.yml > /opt/elasticsearch/config/elasticsearch.yml
+        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch.yml | sed "s/__IP_ADDR__/${IP_ADDR}/" > /opt/elasticsearch/config/elasticsearch.yml
     else 
         echo "Configuring elasticsearch as a client"
-        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch-client.yml > /opt/elasticsearch/config/elasticsearch.yml
+        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch-client.yml | sed "s/__IP_ADDR__/${IP_ADDR}/" > /opt/elasticsearch/config/elasticsearch.yml
     fi
 
     if [ ! -e /opt/elasticsearch/plugins/kopf ]; then

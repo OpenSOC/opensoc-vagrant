@@ -35,15 +35,15 @@ node.name: "__HOSTNAME__"
 # 2. You want this node to only serve as a master: to not store any data and
 #    to have free resources. This will be the "coordinator" of your cluster.
 #
-#node.master: true
-#node.data: false
+node.master: true
+node.data: false
 #
 # 3. You want this node to be neither master nor data node, but
 #    to act as a "search load balancer" (fetching data from nodes,
 #    aggregating results, etc.)
 #
-node.master: false
-node.data: false
+# node.master: false
+# node.data: false
 
 # Use the Cluster Health API [http://localhost:9200/_cluster/health], the
 # Node Info API [http://localhost:9200/_nodes] or GUI tools
@@ -179,7 +179,7 @@ path.plugins: /opt/elasticsearch/plugins
 # Set the address other nodes will use to communicate with this node. If not
 # set, it is automatically derived. It must point to an actual IP address.
 #
-#network.publish_host: 192.168.0.1
+network.publish_host: __IP_ADDR__
 
 # Set both 'bind_host' and 'publish_host':
 #
@@ -292,12 +292,12 @@ path.plugins: /opt/elasticsearch/plugins
 #
 # 1. Disable multicast discovery (enabled by default):
 #
-#discovery.zen.ping.multicast.enabled: false
+discovery.zen.ping.multicast.enabled: false
 #
 # 2. Configure an initial list of master nodes in the cluster
 #    to perform discovery when new nodes (master or data) are started:
 #
-#discovery.zen.ping.unicast.hosts: ["host1", "host2:port"]
+discovery.zen.ping.unicast.hosts: ["node1"]
 
 # EC2 discovery allows to use AWS EC2 API in order to perform discovery.
 #

@@ -38,6 +38,16 @@ function installDependencies {
     mkdir -p /etc/supervisor.d
     mkdir -p /var/log/supervisor
 }
+
+function installNtpd {
+    yum install -y ntp
+
+    ntpdate 0.pool.ntp.org
+
+    service ntpd start
+    chckconfig ntpd on
+}
+
 disableFirewall
 writeHostFile
 installDependencies

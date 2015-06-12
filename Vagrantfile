@@ -53,7 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
                 node.vm.provision "shell" do |s|
                     s.path = "scripts/setup-elasticsearch.sh"
-                    s.args = "-c"
+                    s.args = "-c -i 10.0.0.10#{i}"
                 end
                 node.vm.network "forwarded_port", guest: 9200, host:9200
             else
@@ -83,7 +83,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-r supervisor -t #{numNodes}"
                 end
                 # elasticsearch
-                node.vm.provision "shell", path: "scripts/setup-elasticsearch.sh"
+                node.vm.provision "shell" do |s|
+                    s.path = "scripts/setup-elasticsearch.sh"
+                    s.args = "-i 10.0.0.10#{i}"
+                end
                 # reload supervisord
             end
 
