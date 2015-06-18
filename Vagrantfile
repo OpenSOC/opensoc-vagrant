@@ -56,6 +56,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-c -i 10.0.0.10#{i}"
                 end
                 node.vm.network "forwarded_port", guest: 9200, host:9200
+
+                # setup mysql for geo enrichment
+                node.vm.provision "shell", path: "scripts/setup-geo-enrichment.sh"
             else
                 # zookeeper
                 node.vm.provision "shell" do |s|
