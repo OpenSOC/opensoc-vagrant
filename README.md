@@ -2,8 +2,8 @@
 
 A collection of shell scripts and a Vagrant file for building an OpenSOC cluster. There are two primary goals we hope to solve with this project:
 
-# Create a turnkey OpenSOC cluster to allow users to play with OpenSOC with minimal setup
-# Provide a disposable environment where developers can run and test OpenSOC topologies.
+* Create a turnkey OpenSOC cluster to allow users to play with OpenSOC with minimal setup
+* Provide a disposable environment where developers can run and test OpenSOC topologies.
 
 To accomplish this, we have provided a collection of bash scripts that are orchestrated using [Vagrant](https://www.vagrantup.com/) and [Fabric](http://www.fabfile.org/). Both of these tools should be installed prior to using this project. 
 
