@@ -31,10 +31,10 @@
   </property>
   <property>
     <name>hbase.zookeeper.quorum</name>
-    <value>__ZK_QUORUM__</value>
+    <value>node2:2181,node3:2181,node4:2181</value>
   </property>
   <propery>
     <name>zookeeper.znode.parent</name>
-    <value>/hbase-unsecure</value>
+    <value>/hbase</value>
   </propery>
 </configuration>

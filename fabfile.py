@@ -1,6 +1,10 @@
 #!/usr/bin/python
+import os
+import xml.etree.ElementTree as ETree
+
 from fabric.api import env, local, run, sudo, execute, hosts
-from fabric.context_managers import shell_env
+from fabric.context_managers import shell_env, lcd, cd
+from fabric.colors import yellow, green
 
 # configure fabric to talk to the VMs
 temp_ssh_config = '.ssh_config'
@@ -44,6 +48,8 @@ def postsetup():
         execute(supervisorctl_start, 'nodemanager', host='node{0}'.format(x))
         execute(supervisorctl_start, 'regionserver', host='node{0}'.format(x))
 
+    execute(init_ip_whitelist,host='node1')
+
 def supervisorctl_reread_update():
     sudo('supervisorctl reread')
     sudo('supervisorctl update')
@@ -56,3 +62,102 @@ def supervisorctl_status():
 
 def status():
     execute(supervisorctl_status, hosts=['node{0}'.format(x) for x in range(1,total_nodes+1)])
+
+def init_ip_whitelist():
+    run('/opt/hbase/bin/hbase shell /vagrant/resources/opensoc/hbase_ip_whitelist.rb')
+
+
+@hosts('node2')
+def create_topic(topic, partitions=1, replication_factor=1):
+    run('/opt/kafka/bin/kafka-topics.sh --zookeeper localhost --create --topic {0} --partitions {1} --replication-factor {2}'.format(
+        topic,
+        partitions,
+        replication_factor
+        ))
+
+def get_topologies(repo='../opensoc-streaming'):
+    '''Build and fetch a new OpenSOC topology jar from repo (default: ../opensoc-streaming)'''
+
+    pom_file = os.path.join(repo, 'pom.xml')
+    pom = ETree.parse(pom_file)
+    version = pom.getroot().find('{http://maven.apache.org/POM/4.0.0}version').text
+    rev = local("git log | head -1 | cut -d ' ' -f 2 | cut -c1-11", capture=True)
+
+    topology_jar = os.path.join(
+        repo,
+        'OpenSOC-Topologies',
+        'target',
+        'OpenSOC-Topologies-{0}.jar'.format(version)
+        )
+
+    vagrant_jar = 'OpenSOC-Topologies-{0}-{1}.jar'.format(version, rev)
+    vagrant_jar_path = os.path.join('resources/opensoc', vagrant_jar)
+    
+    if os.path.exists(vagrant_jar_path):
+        print yellow('{0} already exists. Not building a new jar.'.format(vagrant_jar_path))
+        print yellow('Remove the existing jar and run this command again to build a fresh jar.')
+        return vagrant_jar
+
+    with lcd(repo):
+        local('mvn clean package')
+
+    local('cp {0} {1}'.format(
+        topology_jar,
+        vagrant_jar_path
+        ))
+
+    return vagrant_jar
+    
+@hosts('node1')
+def start_topology(topology, repo=None, local_mode=False, config_path='/vagrant/opensoc/OpenSOC_Configs/', generator_spout=False):
+    '''Builds and copies a fresh topology jar from a locally cloned opensoc-streaming and submits it to storm'''
+
+    if repo is not None:
+        jar = get_topologies(repo)
+    else:
+        jar = get_topologies()
+
+    if local_mode:
+        local_mode='true'
+    else:
+        local_mode='false'
+
+    if generator_spout:
+        generator_spout='true'
+    else:
+        generator_spout='false'
+
+    with cd('/vagrant/resources/opensoc/'):
+        run('/opt/storm/bin/storm jar {0} {1} -local_mode {2} -config_path {3} -generator_spout {4}'.format(
+            jar,
+            topology,
+            local_mode,
+            config_path,
+            generator_spout
+            ))
+
+def quickstart():
+    '''Start OpenSOC with bro, snort, and pcap'''
+    # run post setup tasks
+    postsetup()
+
+    # clone opensoc-streaming if its not here locally
+    if not os.path.exists('../opensoc-streaming'):
+        with lcd('../'):
+            local('git clone https://github.com/OpenSOC/opensoc-streaming.git')
+    else:
+        print green('Found a copy of opensoc-streaming in ../opensoc-streaming.')
+
+    for top in ['bro', 'sourcefire', 'pcap']:
+
+        topic = '{0}_raw'.format(top)
+        # create kafka topic
+        execute(create_topic, topic, host='node2')
+
+        # launch topology
+        topology = 'com.opensoc.topology.{0}'.format(top.capitalize())
+        execute(start_topology, topology, config_path='config/')
+
+
+
+

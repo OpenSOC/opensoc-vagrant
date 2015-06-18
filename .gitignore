@@ -1,4 +1,5 @@
 .vagrant/*
 resources/jre*
 resources/tmp/*
+resources/opensoc/*.jar
 .ssh_config
