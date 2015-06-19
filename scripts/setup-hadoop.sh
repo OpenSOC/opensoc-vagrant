@@ -20,6 +20,10 @@ function installHadoop {
     mkdir -p /var/lib/hadoop/hdfs/datanode
     mkdir -p /var/log/hadoop
     mkdir -p /opt/hadoop/logs
+
+    # neeed for writing to HDFS
+    yum install -y snappy snappy-devel
+
 }
 
 function configureHadoop {
@@ -33,6 +37,8 @@ function configureHadoop {
     for i in $(seq 2 $TOTAL_NODES); do
         echo "node${i}" >> /opt/hadoop/etc/hadoop/slaves
     done
+
+    echo "export JAVA_LIBRARY_PATH=\${JAVA_LIBRARY_PATH}:/usr/lib/hadoop/lib/native:/usr/lib64" >> /opt/hadoop/etc/hadoop/hadoop-env.sh
 }
 
 function configureNameNode {

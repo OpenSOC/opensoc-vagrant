@@ -29,6 +29,8 @@ function configureStorm {
     done
 
     echo "nimbus.host: node1" >> /opt/storm/conf/storm.yaml
+    echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm.yaml
+    echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm_env.ini
 
 }
 

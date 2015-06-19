@@ -35,6 +35,6 @@
   </property>
   <propery>
     <name>zookeeper.znode.parent</name>
-    <value>/hbase</value>
+    <value>/hbase-unsecure</value>
   </propery>
 </configuration>

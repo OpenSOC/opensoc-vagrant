@@ -26,8 +26,8 @@ function writeHostFile {
 
 function installDependencies {
     echo "Installing Supervisor"
-    yum install -y epel-release
-    yum install -y python-pip
+    yum install -y epel-release 
+    yum install -y python-pip unzip
 
     pip install supervisor
     pip install argparse
