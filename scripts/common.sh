@@ -11,6 +11,7 @@ HBASE_VERSION_NUM=0.98.12.1
 HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
 HIVE_VERSION=hive-1.2.0
 ES_VERSION=1.5.2
+FLUME_VERSION=1.6.0
 
 # So we dont need to pass in i to the scripts
 NODE_NUMBER=`hostname | tr -d node`
@@ -66,4 +67,12 @@ function safeSymLink {
     fi
 
     ln -s $target $symlink
+}
+
+function commentLine {
+    line="${1}"
+    file="${2}"
+
+    echo "Commenting out '${line}' from ${file}"
+    sed -i "s/^${line}/# ${line}/" $file
 }

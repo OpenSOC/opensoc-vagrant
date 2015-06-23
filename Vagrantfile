@@ -57,6 +57,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 end
                 node.vm.network "forwarded_port", guest: 9200, host:9200
 
+                # flume
+                node.vm.provision "shell", path: "scripts/setup-flume.sh"
+
                 # setup mysql for geo enrichment
                 node.vm.provision "shell", path: "scripts/setup-geo-enrichment.sh"
             else
@@ -96,5 +99,38 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             #After everything is provisioned, start Supervisor
             node.vm.provision "shell", inline: "pgrep supervisord || start supervisor"
         end
+    end
+
+    config.vm.define "data" do |data|
+        data.vm.box = "chef/centos-6.5"
+        data.vm.provider "virtualbox" do |v|
+          v.name = "data"
+          v.customize ["modifyvm", :id, "--memory", "1024"]
+        end
+        data.vm.network :private_network, ip: "10.0.0.200"
+        
+        data.vm.provision "shell" do |s|
+            s.path = "scripts/setup-os.sh"
+            s.args = "-t #{numNodes}"
+        end
+
+        data.vm.provision "shell", path: "scripts/setup-java.sh"
+
+        data.vm.provision "shell", path: "scripts/data/setup-syslog.sh"
+
+        # flume
+        data.vm.provision "shell", path: "scripts/data/setup-flume.sh"
+
+        # snort
+        data.vm.provision "shell", path: "scripts/data/setup-snort.sh"
+        
+        # bro
+        data.vm.provision "shell", path: "scripts/data/setup-bro.sh"
+
+        # pycapa
+        data.vm.provision "shell", path: "scripts/data/setup-pycapa.sh"
+
+        # tcpreplay
+        data.vm.provision "shell", path: "scripts/data/setup-tcpreplay.sh"
     end
 end

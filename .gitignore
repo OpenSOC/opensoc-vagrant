@@ -3,3 +3,4 @@ resources/jre*
 resources/tmp/*
 resources/opensoc/*.jar
 .ssh_config
+resources/data/snortrules*

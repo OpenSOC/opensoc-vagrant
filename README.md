@@ -13,16 +13,22 @@ Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the insp
 
 ## Quick Start
 
-If you don't want to bother with the details of the cluster, and just want to see OpenSOC, place a RPM For Oracle's JVM in `resources/` and edit `common.sh` to set `JRE_RPM` to the name of the RPM. Then run:
+If you don't want to bother with the details of the cluster, and just want to see OpenSOC, do the following:
+
+* Place a RPM For Oracle's JVM in `resources/`, edit `common.sh` to set `JRE_RPM` to the name of the RPM. 
+* Get a set of snort rules from [here](https://www.snort.org/downloads), place them in `resources/data` and set `RULES_TARBALL` in `scripts/data/setup-snort.sh`
+* Idenity a pcap file to process with OpenSOC
+
+Then run:
 
 ```
 vagrant up
-fab vagrant quickstart
+fab vagrant quickstart /path/to/pcap/file.pcap
 ```
 
 Finally, point your browser at https://localhost:8443
 
-This should get you a running OpenSOC cluster with Bro, Snort, and PCAP. If you are looking to customize the setup or run your own topologies, see the secions below on running the cluster and running an OpenSOC Topology.
+This should get you a running OpenSOC cluster with Bro, Snort, and PCAP. The PCAP you specify get copied to the data VM, and processed by Bro, Sourcefire, and [Pycapa](https://github.com/OpenSOC/pycapa) If you are looking to customize the setup or run your own topologies, see the secions below on running the cluster and running an OpenSOC Topology.
 
 ## Advanced Setup
 
@@ -89,6 +95,12 @@ By default, 4 VMs will be created. They are named node1, node2, node3, and node4
   * HBase Regionserver
   * Elasticsearch Data Nodes
 
+* data
+  * Flume
+  * Snort
+  * Bro
+  * Pycapa
+  
 ## Port Forwarding
 
 Some service's UIs are forwarded to localhost for ease of use. You can find the following services forwarded by default:
