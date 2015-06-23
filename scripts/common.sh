@@ -21,12 +21,13 @@ function downloadFile {
     url="${1}"
     filename="${2}"
 
-    cached_file="/vagrant/resources/tmp/${filename}"
+    tmp_dir="/vagrant/resources/tmp/"
+    cached_file="${tmp_dir}${filename}"
 
     if [ ! -e $cached_file ]; then
         echo "Downloading ${filename} from ${url} to ${cached_file}"
         echo "This will take some time. Please be patient..."
-        wget -nv -O $cached_file $url
+        wget -nv -P $tmp_dir $url
     fi
 
     TARBALL=$cached_file
