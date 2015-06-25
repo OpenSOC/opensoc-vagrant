@@ -57,9 +57,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 end
                 node.vm.network "forwarded_port", guest: 9200, host:9200
 
-                # flume
-                node.vm.provision "shell", path: "scripts/setup-flume.sh"
-
                 # setup mysql for geo enrichment
                 node.vm.provision "shell", path: "scripts/setup-geo-enrichment.sh"
             else
