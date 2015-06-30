@@ -12,8 +12,8 @@ function installBro {
 
 function configureBro {
 
-    cp /vagrant/resources/data/local.bro /opt/bro/share/site/local.bro
-    
+    cp /vagrant/resources/data/local.bro /opt/bro/share/bro/site/local.bro
+
     sed -i 's/interface=eth0/interface=lo/' /opt/bro/etc/node.cfg
 
     /opt/bro/bin/broctl install
@@ -22,4 +22,4 @@ function configureBro {
 echo "Setting up Bro"
 installBro
 configureBro
-/opt/bro/bin/broctl start
+/opt/bro/bin/broctl restart
