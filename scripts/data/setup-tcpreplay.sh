@@ -3,9 +3,7 @@
 source "/vagrant/scripts/common.sh"
 
 function installTcpreplay {
-
-
-    echo "not implemented yet..."
+    yum install -y tcpreplay
 }
 
 echo "Setting up Tcpreplay"
