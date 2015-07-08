@@ -3,7 +3,7 @@
 source "/vagrant/scripts/common.sh"
 
 while getopts t: option; do
-    case $option in 
+    case $option in
         t) TOTAL_NODES=$OPTARG;;
     esac
 done
@@ -36,13 +36,14 @@ function configureZookeeper {
     echo "syncLimit=5" >> /opt/zookeeper/conf/zoo.cfg
     echo "dataDir=/var/lib/zookeeper" >> /opt/zookeeper/conf/zoo.cfg
     echo "clientPort=2181" >> /opt/zookeeper/conf/zoo.cfg
+    echo "maxClientCnxns=0" >> /opt/zookeeper/conf/zoo.cfg
 
     for i in $(seq 1 $TOTAL_NODES); do
         echo "server.${i}=node${i}:2888:3888" >> /opt/zookeeper/conf/zoo.cfg
     done
 
     cp /vagrant/resources/zookeeper/supervisor-zookeeper.conf /etc/supervisor.d/zookeeper.conf
-} 
+}
 
 echo "Setting up Zookeeper"
 

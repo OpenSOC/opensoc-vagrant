@@ -20,13 +20,14 @@ function writeHostFile {
     echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
 
     for i in $(seq 1 $TOTAL_NODES); do
-        echo "10.0.0.10${i}   node${i}" >> /etc/hosts
+        z = $i - 1
+        echo "10.0.0.10${i}   node${i} zkpr${i-1}" >> /etc/hosts
     done
 }
 
 function installDependencies {
     echo "Installing Supervisor"
-    yum install -y epel-release 
+    yum install -y epel-release
     yum install -y python-pip unzip
 
     pip install supervisor
@@ -48,6 +49,11 @@ function installNtpd {
     chckconfig ntpd on
 }
 
+function configureUlimit {
+    echo "root  hard    nofile  10240" > /etc/security/limit.d/50-root.conf
+}
+
+configureUlimit
 disableFirewall
 writeHostFile
 installDependencies
