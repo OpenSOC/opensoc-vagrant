@@ -14,7 +14,7 @@ def vagrant():
     with open(temp_ssh_config, 'w') as f:
         f.write(local('vagrant ssh-config', capture=True))
 
-    global total_nodes 
+    global total_nodes
     total_nodes = int(local('vagrant status | grep node | wc -l', capture=True))
 
     env.user = 'vagrant'
@@ -92,14 +92,14 @@ def get_topologies(repo='../opensoc-streaming'):
 
     vagrant_jar = 'OpenSOC-Topologies-{0}-{1}.jar'.format(version, rev)
     vagrant_jar_path = os.path.join('resources/opensoc', vagrant_jar)
-    
+
     if os.path.exists(vagrant_jar_path):
         print yellow('{0} already exists. Not building a new jar.'.format(vagrant_jar_path))
         print yellow('Remove the existing jar and run this command again to build a fresh jar.')
         return vagrant_jar
 
     with lcd(repo):
-        local('mvn clean package')
+        local('mvn clean package -Dmaven.test.skip=true')
 
     local('cp {0} {1}'.format(
         topology_jar,
@@ -107,9 +107,9 @@ def get_topologies(repo='../opensoc-streaming'):
         ))
 
     return vagrant_jar
-    
+
 @hosts('node1')
-def start_topology(topology, repo=None, local_mode=False, config_path='/vagrant/opensoc/OpenSOC_Configs/', generator_spout=False):
+def start_topology(topology, repo=None, local_mode=False, config_path='/vagrant/resources/opensoc/config/', generator_spout=False):
     '''Builds and copies a fresh topology jar from a locally cloned opensoc-streaming and submits it to storm'''
 
     if repo is not None:
@@ -136,6 +136,15 @@ def start_topology(topology, repo=None, local_mode=False, config_path='/vagrant/
             generator_spout
             ))
 
+def restart_storm():
+    ''' restarts storm workers and nimbus'''
+
+    execute(supervisorctl_stop, 'storm-nimbus', host='node1')
+    execute(supervisorctl_stop, 'storm-supervisor', hosts=[ 'node{0}'.format(x) for x in range(2, total_nodes+1)])
+
+    execute(supervisorctl_start, 'storm-nimbus', host='node1')
+    execute(supervisorctl_start, 'storm-supervisor', hosts=[ 'node{0}'.format(x) for x in range(2, total_nodes+1)])
+
 def quickstart():
     '''Start OpenSOC with bro, snort, and pcap'''
     # run post setup tasks
@@ -157,7 +166,3 @@ def quickstart():
         # launch topology
         topology = 'com.opensoc.topology.{0}'.format(top.capitalize())
         execute(start_topology, topology, config_path='config/')
-
-
-
-
