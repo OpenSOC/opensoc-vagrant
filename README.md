@@ -5,7 +5,7 @@ A collection of shell scripts and a Vagrant file for building an OpenSOC cluster
 * Create a turnkey OpenSOC cluster to allow users to play with OpenSOC with minimal setup
 * Provide a disposable environment where developers can run and test OpenSOC topologies.
 
-To accomplish this, we have provided a collection of bash scripts that are orchestrated using [Vagrant](https://www.vagrantup.com/) and [Fabric](http://www.fabfile.org/). Both of these tools should be installed prior to using this project. 
+To accomplish this, we have provided a collection of bash scripts that are orchestrated using [Vagrant](https://www.vagrantup.com/) and [Fabric](http://www.fabfile.org/). Both of these tools should be installed prior to using this project.
 
 ## Inspiration
 
@@ -15,7 +15,7 @@ Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the insp
 
 If you don't want to bother with the details of the cluster, and just want to see OpenSOC, do the following:
 
-* Place a RPM For Oracle's JVM in `resources/`, edit `common.sh` to set `JRE_RPM` to the name of the RPM. 
+* Place a RPM For Oracle's JVM in `resources/`, edit `common.sh` to set `JRE_RPM` to the name of the RPM.
 * Get a set of snort rules from [here](https://www.snort.org/downloads), place them in `resources/data` and set `RULES_TARBALL` in `scripts/data/setup-snort.sh`
 * Idenity a pcap file to process with OpenSOC
 
@@ -100,7 +100,7 @@ By default, 4 VMs will be created. They are named node1, node2, node3, and node4
   * Snort
   * Bro
   * Pycapa
-  
+
 ## Port Forwarding
 
 Some service's UIs are forwarded to localhost for ease of use. You can find the following services forwarded by default:
@@ -118,12 +118,14 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * Java - DONE
 * Zookeeper - DONE
 * HDFS/Yarn - DONE
-* Kafka - DONE 
+* Kafka - DONE
 * Storm - DONE
 * Hbase - DONE
 * Hive - DONE
 * Elasticsearch - DONE
 * GeoIP Enrichment Data - DONE
 * OpenSOC UI
-* OpenSOC Storm Topologies
-
+* OpenSOC Storm Topologies - DONE
+* Snort - DONE
+* Pycaoa - DONE
+* Bro - DONE
