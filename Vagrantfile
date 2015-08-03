@@ -90,7 +90,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.path = "scripts/setup-elasticsearch.sh"
                     s.args = "-i 10.0.0.10#{i}"
                 end
-                # reload supervisord
             end
 
             #After everything is provisioned, start Supervisor

@@ -2,9 +2,9 @@
 
 source "/vagrant/scripts/common.sh"
 
-DAQ_VER=2.0.5-1
-SNORT_VER=2.9.7.3-1
-RULES_TARBALL=snortrules-snapshot-2973.tar.gz
+DAQ_VER=2.0.6-1
+SNORT_VER=2.9.7.5-1
+RULES_TARBALL=snortrules-snapshot-2975.tar.gz
 
 function installDeps {
     echo "installing dependencies"
@@ -27,7 +27,6 @@ function installSnort {
 }
 
 function configureSnort {
-
     echo "installing local rules"
     tar -xzf "/vagrant/resources/data/${RULES_TARBALL}" -C /etc/snort
 

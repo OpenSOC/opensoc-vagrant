@@ -34,7 +34,7 @@ function configureElasticsearch {
 
     if [ ! -e /opt/elasticsearch/plugins/kopf ]; then
         echo "Installing kopf plugin"
-        /opt/elasticsearch/bin/plugin --install lmenezes/elasticsearch-kopf/1.5.3
+        /opt/elasticsearch/bin/plugin --install lmenezes/elasticsearch-kopf/1.5.6
     fi
 
     cp /vagrant/resources/elasticsearch/supervisor-elasticsearch.conf /etc/supervisor.d/elasticsearch.conf
