@@ -19,7 +19,7 @@ function installSnort {
     yum localinstall -y "/root/rpmbuild/RPMS/x86_64/daq-${DAQ_VER}.x86_64.rpm"
 
     downloadFile "https://www.snort.org/downloads/snort/snort-${SNORT_VER}.src.rpm" "snort-${SNORT_VER}.src.rpm"
-    rpmbuild --rebuild $TARBALL
+    rpmbuild -D 'debug_package %{nil}' --rebuild $TARBALL
     yum localinstall -y "/root/rpmbuild/RPMS/x86_64/snort-${SNORT_VER}.x86_64.rpm"
 
     mkdir -p /usr/local/lib/snort_dynamicrules
