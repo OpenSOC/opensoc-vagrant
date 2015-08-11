@@ -2,6 +2,7 @@
 
 source "/vagrant/scripts/common.sh"
 
+STORM_FOL=/opt/storm
 
 while getopts t:r: option; do
     case $option in
@@ -15,7 +16,7 @@ function installStorm {
     downloadApacheFile storm ${STORM_VERSION} "${STORM_VERSION}.tar.gz"
 
     tar -oxzf $TARBALL -C /opt
-    safeSymLink "/opt/${STORM_VERSION}" /opt/storm
+    safeSymLink "/opt/${STORM_VERSION}" $STORM_FOL
 
     mkdir -p /var/log/storm
 }
@@ -31,6 +32,7 @@ function configureStorm {
     echo "nimbus.host: node1" >> /opt/storm/conf/storm.yaml
     echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm.yaml
     echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm_env.ini
+    echo "export PATH=/opt/storm/bin:$PATH">>~/.bashrc
 
 }
 
