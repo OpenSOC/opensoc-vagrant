@@ -3,7 +3,7 @@
 source "/vagrant/scripts/common.sh"
 
 function installPycapa {
-
+    yum install -y git
     git clone https://github.com/OpenSOC/pycapa /opt/pycapa
     cd /opt/pycapa
     pip install -r requirements.txt
