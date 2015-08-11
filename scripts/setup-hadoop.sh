@@ -41,6 +41,8 @@ function configureHadoop {
     done
 
     echo "export JAVA_LIBRARY_PATH=\${JAVA_LIBRARY_PATH}:/usr/lib/hadoop/lib/native:/usr/lib64" >> $HADOOP_PATH/etc/hadoop/hadoop-env.sh
+    echo "export PATH=$HADOOPC_PATH/bin:$PATH">>/home/vagrant/.bashrc
+
 }
 
 function configureNameNode {
