@@ -3,14 +3,14 @@
 JRE_RPM=jre-7u79-linux-x64.rpm
 HADOOP_VERSION=hadoop-2.6.0
 ZOOKEEPER_VERSION=zookeeper-3.4.6
-KAFKA_SCALA_VERSION=2.9.2
-KAFKA_VERSION_NUM=0.8.1.1
+KAFKA_SCALA_VERSION=2.10
+KAFKA_VERSION_NUM=0.8.2.1
 KAFKA_VERSION="kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION_NUM}"
 STORM_VERSION=apache-storm-0.9.4
-HBASE_VERSION_NUM=0.98.12.1
+HBASE_VERSION_NUM=0.98.13
 HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
-HIVE_VERSION=hive-1.2.0
-ES_VERSION=1.5.2
+HIVE_VERSION=hive-1.2.1
+ES_VERSION=1.7.1
 FLUME_VERSION=1.6.0
 
 # So we dont need to pass in i to the scripts
@@ -27,7 +27,7 @@ function downloadFile {
     if [ ! -e $cached_file ]; then
         echo "Downloading ${filename} from ${url} to ${cached_file}"
         echo "This will take some time. Please be patient..."
-        wget -nv -P $cached_file $url
+        wget -nv -O $cached_file $url
     fi
 
     TARBALL=$cached_file
@@ -62,7 +62,7 @@ function safeSymLink {
     symlink=$2
 
     if [ -e $symlink ]; then
-        echo "${symlink} exists. Deleteing."
+        echo "${symlink} exists. Deleting."
         rm $symlink
     fi
 
