@@ -2,7 +2,7 @@
 
 source "/vagrant/scripts/common.sh"
 
-STORM_FOL=/opt/storm
+STORM_PATH=/opt/storm
 
 while getopts t:r: option; do
     case $option in
@@ -16,7 +16,7 @@ function installStorm {
     downloadApacheFile storm ${STORM_VERSION} "${STORM_VERSION}.tar.gz"
 
     tar -oxzf $TARBALL -C /opt
-    safeSymLink "/opt/${STORM_VERSION}" $STORM_FOL
+    safeSymLink "/opt/${STORM_VERSION}" $STORM_PATH
 
     mkdir -p /var/log/storm
 }
@@ -24,15 +24,15 @@ function installStorm {
 function configureStorm {
     echo "Configuring Storm"
 
-    echo "storm.zookeeper.servers:" >> /opt/storm/conf/storm.yaml
+    echo "storm.zookeeper.servers:" >> $STORM_PATH/conf/storm.yaml
     for i in $(seq 2 $TOTAL_NODES); do
-        echo "  - node${i}" >> /opt/storm/conf/storm.yaml
+        echo "  - node${i}" >> $STORM_PATH/conf/storm.yaml
     done
 
-    echo "nimbus.host: node1" >> /opt/storm/conf/storm.yaml
-    echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm.yaml
-    echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> /opt/storm/conf/storm_env.ini
-    echo "export PATH=/opt/storm/bin:$PATH">>~/.bashrc
+    echo "nimbus.host: node1" >> $STORM_PATH/conf/storm.yaml
+    echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/conf/storm.yaml
+    echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/conf/storm_env.ini
+    echo "export PATH=$STORM_PATH/storm/bin:$PATH">>~/.bashrc
 
 }
 
