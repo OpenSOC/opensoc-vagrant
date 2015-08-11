@@ -35,9 +35,9 @@ function configureElasticsearch {
         sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch-client.yml | sed "s/__IP_ADDR__/${IP_ADDR}/" > $ELASTIC_PATH/config/elasticsearch.yml
     fi
 
-    if [ ! -e /opt/elasticsearch/plugins/kopf ]; then
+    if [ ! -e $ELASTIC_PATH/plugins/kopf ]; then
         echo "Installing kopf plugin"
-        /opt/elasticsearch/bin/plugin --install lmenezes/elasticsearch-kopf/1.5.6
+        $ELASTIC_PATH/bin/plugin --install lmenezes/elasticsearch-kopf/1.5.6
     fi
 
     cp /vagrant/resources/elasticsearch/supervisor-elasticsearch.conf /etc/supervisor.d/elasticsearch.conf
