@@ -20,7 +20,7 @@ function writeHostFile {
     echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
 
     for i in $(seq 1 $TOTAL_NODES); do
-        z = $i - 1
+        #z = $i - 1
         echo "10.0.0.10${i}   node${i} zkpr${i-1}" >> /etc/hosts
     done
 }
@@ -30,6 +30,10 @@ function installDependencies {
     yum install -y epel-release
     yum install -y python-pip unzip
     
+     #yum installs an old version of setuptools and iniparse
+    pip install -U setuptools
+    pip install -U iniparse 
+ 
     yum install -y nano
     
     yum install -y python-meld3 #requested for supervisord
@@ -54,7 +58,7 @@ function installNtpd {
 }
 
 function configureUlimit {
-    echo "root  hard    nofile  10240" > /etc/security/limit.d/50-root.conf
+    echo "root  hard    nofile  10240" > /etc/security/limits.d/50-root.conf
 }
 
 configureUlimit
