@@ -27,7 +27,7 @@ function downloadFile {
     if [ ! -e $cached_file ]; then
         echo "Downloading ${filename} from ${url} to ${cached_file}"
         echo "This will take some time. Please be patient..."
-        wget -nv -O $cached_file $url
+        wget -nv -P $cached_file $url
     fi
 
     TARBALL=$cached_file
