@@ -29,7 +29,11 @@ function installDependencies {
     echo "Installing Supervisor"
     yum install -y epel-release
     yum install -y python-pip unzip
-
+    
+    yum install -y nano
+    
+    yum install -y python-meld3 #requested for supervisord
+    
     pip install supervisor
     pip install argparse
 
