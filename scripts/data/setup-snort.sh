@@ -2,9 +2,9 @@
 
 source "/vagrant/scripts/common.sh"
 
-DAQ_VER=2.0.5-1
-SNORT_VER=2.9.7.3-1
-RULES_TARBALL=snortrules-snapshot-2973.tar.gz
+DAQ_VER=2.0.6-1
+SNORT_VER=2.9.7.5-1
+RULES_TARBALL=snortrules-snapshot-2975.tar.gz
 
 function installDeps {
     echo "installing dependencies"
@@ -19,7 +19,7 @@ function installSnort {
     yum localinstall -y "/root/rpmbuild/RPMS/x86_64/daq-${DAQ_VER}.x86_64.rpm"
 
     downloadFile "https://www.snort.org/downloads/snort/snort-${SNORT_VER}.src.rpm" "snort-${SNORT_VER}.src.rpm"
-    rpmbuild --rebuild $TARBALL
+    rpmbuild -D 'debug_package %{nil}' --rebuild $TARBALL
     yum localinstall -y "/root/rpmbuild/RPMS/x86_64/snort-${SNORT_VER}.x86_64.rpm"
 
     mkdir -p /usr/local/lib/snort_dynamicrules
@@ -27,7 +27,6 @@ function installSnort {
 }
 
 function configureSnort {
-
     echo "installing local rules"
     tar -xzf "/vagrant/resources/data/${RULES_TARBALL}" -C /etc/snort
 
