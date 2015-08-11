@@ -2,6 +2,8 @@
 
 source "/vagrant/scripts/common.sh"
 
+HADOOP_PATH=/opt/hadoop
+
 while getopts r:t: option; do
     case $option in
         t) TOTAL_NODES=$OPTARG;;
@@ -14,12 +16,12 @@ function installHadoop {
     downloadApacheFile hadoop/common $HADOOP_VERSION "${HADOOP_VERSION}.tar.gz"
 
     tar -oxzf $TARBALL -C /opt
-    safeSymLink "/opt/${HADOOP_VERSION}/" /opt/hadoop
+    safeSymLink "/opt/${HADOOP_VERSION}/" $HADOOP_PATH
 
     mkdir -p /var/lib/hadoop/hdfs/namenode
     mkdir -p /var/lib/hadoop/hdfs/datanode
     mkdir -p /var/log/hadoop
-    mkdir -p /opt/hadoop/logs
+    mkdir -p $HADOOP_PATH/logs
 
     # neeed for writing to HDFS
     yum install -y snappy snappy-devel
@@ -30,15 +32,15 @@ function configureHadoop {
     HADOOP_RESOURCE_DIR=/vagrant/resources/hadoop
     for file in `ls ${HADOOP_RESOURCE_DIR}/*.xml`; do
         echo "Copying ${file}"
-        cp $file /opt/hadoop/etc/hadoop
+        cp $file $HADOOP_PATH/etc/hadoop
     done
 
     echo "Setting slaves file"
     for i in $(seq 2 $TOTAL_NODES); do
-        echo "node${i}" >> /opt/hadoop/etc/hadoop/slaves
+        echo "node${i}" >> $HADOOP_PATH/etc/hadoop/slaves
     done
 
-    echo "export JAVA_LIBRARY_PATH=\${JAVA_LIBRARY_PATH}:/usr/lib/hadoop/lib/native:/usr/lib64" >> /opt/hadoop/etc/hadoop/hadoop-env.sh
+    echo "export JAVA_LIBRARY_PATH=\${JAVA_LIBRARY_PATH}:/usr/lib/hadoop/lib/native:/usr/lib64" >> $HADOOP_PATH/etc/hadoop/hadoop-env.sh
 }
 
 function configureNameNode {
