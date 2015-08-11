@@ -36,6 +36,7 @@ function configureHadoop {
     done
 
     echo "Setting slaves file"
+    echo "#localhost" > $HADOOP_PATH/etc/hadoop/slaves
     for i in $(seq 2 $TOTAL_NODES); do
         echo "node${i}" >> $HADOOP_PATH/etc/hadoop/slaves
     done
