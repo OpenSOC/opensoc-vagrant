@@ -34,7 +34,11 @@ function configureKafka {
 
     cp /vagrant/resources/kafka/supervisor-kafka.conf /etc/supervisor.d/kakfa.conf
     
-    echo "export PATH=$KAFKA_PATH/bin:$PATH">>/home/vagrant/.bashrc
+    echo "export PATH=\$PATH:$KAFKA_PATH/bin/" >> /home/vagrant/.bash_profile
+
+    source /home/vagrant/.bash_profile  
+ 
+
 
 }
 
@@ -42,3 +46,5 @@ function configureKafka {
 echo "Setting up Kafka"
 installKafka
 configureKafka
+
+
