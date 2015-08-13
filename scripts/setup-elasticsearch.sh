@@ -2,7 +2,7 @@
 
 source "/vagrant/scripts/common.sh"
 
-ELASTIC_PATH=/opt/elasticsearch
+ELASTIC_PATH="/opt/elasticsearch"
 
 
 while getopts ci: option; do
@@ -14,7 +14,7 @@ done
 
 function installElasticsearch {
 
-    downloadFile "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz" "elasticsearch-${ES_VERSION}.tar.gz"
+    downloadFile "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz" "elastics$
 
     tar -oxf $TARBALL -C /opt
     safeSymLink "/opt/elasticsearch-${ES_VERSION}" $ELASTIC_PATH 
@@ -29,10 +29,10 @@ function configureElasticsearch {
     hostname=`hostname -f`
     if [ -z "${ES_CLIENT}" ]; then
         echo "Configuring elasticsearch as a normal node"
-        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch.yml | sed "s/__IP_ADDR__/${IP_ADDR}/" > $ELASTIC_PATH/config/elasticsearch.yml
+        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch.yml | sed "s/__IP_ADDR__/${IP_$
     else 
         echo "Configuring elasticsearch as a client"
-        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch-client.yml | sed "s/__IP_ADDR__/${IP_ADDR}/" > $ELASTIC_PATH/config/elasticsearch.yml
+        sed "s/__HOSTNAME__/${hostname}/" /vagrant/resources/elasticsearch/elasticsearch-client.yml | sed "s/__IP_ADDR_$
     fi
 
     if [ ! -e $ELASTIC_PATH/plugins/kopf ]; then
@@ -41,7 +41,10 @@ function configureElasticsearch {
     fi
 
     cp /vagrant/resources/elasticsearch/supervisor-elasticsearch.conf /etc/supervisor.d/elasticsearch.conf
-    echo "export PATH=$ELASTIC_PATH/bin:$PATH">>/home/vagrant/.bashrc
+
+    echo "export PATH=\$PATH:$ELASTIC_PATH/bin/" >> /home/vagrant/.bash_profile
+
+    source /home/vagrant/.bash_profile  
 
 }
 echo "Setting up Elasticsearch"
