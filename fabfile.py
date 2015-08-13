@@ -10,7 +10,7 @@ from fabric.colors import yellow, green
 temp_ssh_config = '.ssh_config'
 
 def vagrant():
-    '''sets up fabric environment to work with vagrant VMs'''
+    '''Sets up fabric environment to work with vagrant VMs'''
     with open(temp_ssh_config, 'w') as f:
         f.write(local('vagrant ssh-config', capture=True))
 
@@ -36,17 +36,31 @@ def supervisorctl_stop(process):
     '''Stop a process managed by supervisor'''
     sudo('supervisorctl stop {0}'.format(process))
 
+def supervisorctl_startall():
+    sudo('pgrep supervisord || start supervisor', warn_only=True)
+    sudo('supervisorctl start all')
+
+def startall():
+    '''Ensure that all services are up and running'''
+    for x in range(total_nodes,0,-1):
+        execute(supervisorctl_startall, host='node{0}'.format(x))
+
+def supervisorctl_stopall():
+    sudo('supervisorctl stop all')
+
+def restartall():
+    '''Restart all services'''
+    for x in range(total_nodes,0,-1):
+        execute(supervisorctl_stopall, host='node{0}'.format(x))
+    for x in range(total_nodes,0,-1):
+        execute(supervisorctl_startall, host='node{0}'.format(x))
+
 
 def postsetup():
     '''Perform post vagrant up tasks on cluster'''
+
     execute(format_namenode)
-    execute(supervisorctl_start, 'namenode', host='node1')
-    execute(supervisorctl_start, 'resourcemanager', host='node1')
-    execute(supervisorctl_start, 'master', host='node1')
-    for x in range(2,total_nodes+1):
-        execute(supervisorctl_start, 'datanode', host='node{0}'.format(x))
-        execute(supervisorctl_start, 'nodemanager', host='node{0}'.format(x))
-        execute(supervisorctl_start, 'regionserver', host='node{0}'.format(x))
+    execute(startall)
 
     execute(init_ip_whitelist,host='node1')
 
@@ -61,8 +75,10 @@ def supervisorctl_status():
     sudo('supervisorctl status')
 
 def status():
+    '''Check the status of all services'''
     execute(supervisorctl_status, hosts=['node{0}'.format(x) for x in range(1,total_nodes+1)])
 
+@hosts('node1')
 def init_ip_whitelist():
     run('/opt/hbase/bin/hbase shell /vagrant/resources/opensoc/hbase_ip_whitelist.rb')
 
@@ -137,7 +153,7 @@ def start_topology(topology, repo=None, local_mode=False, config_path='/vagrant/
             ))
 
 def restart_storm():
-    ''' restarts storm workers and nimbus'''
+    '''Restarts storm workers and nimbus'''
 
     execute(supervisorctl_stop, 'storm-nimbus', host='node1')
     execute(supervisorctl_stop, 'storm-supervisor', hosts=[ 'node{0}'.format(x) for x in range(2, total_nodes+1)])

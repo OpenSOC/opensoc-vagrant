@@ -21,7 +21,7 @@ function installHadoop {
     mkdir -p /var/log/hadoop
     mkdir -p /opt/hadoop/logs
 
-    # neeed for writing to HDFS
+    # needed for writing to HDFS
     yum install -y snappy snappy-devel
 
 }
@@ -34,6 +34,7 @@ function configureHadoop {
     done
 
     echo "Setting slaves file"
+    echo "#localhost" > /opt/hadoop/etc/hadoop/slaves
     for i in $(seq 2 $TOTAL_NODES); do
         echo "node${i}" >> /opt/hadoop/etc/hadoop/slaves
     done

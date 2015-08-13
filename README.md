@@ -23,7 +23,7 @@ Then run:
 
 ```
 vagrant up
-fab vagrant quickstart /path/to/pcap/file.pcap
+fab vagrant quickstart
 ```
 
 Finally, point your browser at https://localhost:8443

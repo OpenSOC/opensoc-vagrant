@@ -38,7 +38,7 @@ function configureZookeeper {
     echo "clientPort=2181" >> /opt/zookeeper/conf/zoo.cfg
     echo "maxClientCnxns=0" >> /opt/zookeeper/conf/zoo.cfg
 
-    for i in $(seq 1 $TOTAL_NODES); do
+    for i in $(seq 2 $TOTAL_NODES); do
         echo "server.${i}=node${i}:2888:3888" >> /opt/zookeeper/conf/zoo.cfg
     done
 
