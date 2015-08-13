@@ -46,12 +46,14 @@ function configureZookeeper {
 
     cp /vagrant/resources/zookeeper/supervisor-zookeeper.conf /etc/supervisor.d/zookeeper.conf
     
-    echo "export PATH=$ZOOKEEPER_PATH/bin:$PATH">>/home/vagrant/.bashrc
+    echo "export PATH=\$PATH:$ZOOKEEPER_PATH/bin/" >> /home/vagrant/.bash_profile
 
-    
+    source /home/vagrant/.bash_profile  
+
 }
 
 echo "Setting up Zookeeper"
 
 installZookeeper
 configureZookeeper
+
