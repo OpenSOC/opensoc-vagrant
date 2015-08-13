@@ -37,14 +37,13 @@ function configureKafka {
     echo "export PATH=\$PATH:$KAFKA_PATH/bin/" >> /home/vagrant/.bash_profile
 
     source /home/vagrant/.bash_profile  
- 
-
 
 }
-
 
 echo "Setting up Kafka"
 installKafka
 configureKafka
+
+
 
 
