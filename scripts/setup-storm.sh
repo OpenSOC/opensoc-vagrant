@@ -30,9 +30,12 @@ function configureStorm {
     done
 
     echo "nimbus.host: node1" >> $STORM_PATH/conf/storm.yaml
-    echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/conf/storm.yaml
-    echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/conf/storm_env.ini
-    echo "export PATH=$STORM_PATH/storm/bin:$PATH">>/home/vagrant/.bashrc
+    echo "java.library.path: /usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/c$
+    echo "LD_LIBRARY_PATH:/usr/local/lib:/opt/local/lib:/usr/lib:/opt/hadoop/lib/native:/usr/lib64" >> $STORM_PATH/conf$
+ 
+    echo "export PATH=\$PATH:$STORM_PATH/bin/" >> /home/vagrant/.bash_profile
+
+    source /home/vagrant/.bash_profile  
 
 }
 
