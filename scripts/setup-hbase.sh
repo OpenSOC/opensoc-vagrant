@@ -23,13 +23,18 @@ function installHbase {
 function configureHbase {
 
     generateZkStringNoPorts $TOTAL_NODES
-    sed "s/__ZK_QUORUM__/${ZK_STRING_NOPORTS}/" /vagrant/resources/hbase/hbase-site.xml > $HBASE_PATH/conf/hbase-site.xml
+    sed "s/__ZK_QUORUM__/${ZK_STRING_NOPORTS}/" /vagrant/resources/hbase/hbase-site.xml > $HBASE_PATH/conf/hbase-site.x$
     cp "/vagrant/resources/hbase/supervisor-${HBASE_ROLE}.conf" /etc/supervisor.d/hbase.conf
-    echo "export PATH=$HBASE_PATH/bin:$PATH">>/home/vagrant/.bashrc
+
+    echo "export PATH=\$PATH:$HBASE_PATH/bin/" >> /home/vagrant/.bash_profile
+
+    source /home/vagrant/.bash_profile  
 
 }
 
 echo "Setting up HBase"
 installHbase
 configureHbase
+
+
 
