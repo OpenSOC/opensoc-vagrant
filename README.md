@@ -127,5 +127,5 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * OpenSOC UI
 * OpenSOC Storm Topologies - DONE
 * Snort - DONE
-* Pycaoa - DONE
+* Pycapa - DONE
 * Bro - DONE
