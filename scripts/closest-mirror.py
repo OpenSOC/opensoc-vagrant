@@ -14,8 +14,11 @@ closer_url = 'http://www.apache.org/dyn/closer.cgi/{0}/?as_json=1'.format(args.p
 
 response = json.loads(urllib2.urlopen(closer_url).read())
 
-
 path = response['path_info']
+
+#added this 01/09/15
+path = format(args.project)
+
 
 if args.version:
     path = os.path.join(path, args.version)
