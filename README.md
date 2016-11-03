@@ -11,6 +11,17 @@ To accomplish this, we have provided a collection of bash scripts that are orche
 
 Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the inspiration for this. This project is heavily influenced by that one.
 
+## Customized Setup
+ Run `vagrant up`
+ Run `fab vagrant postsetup`
+
+ Below are endpoints for different services. See VagrantFile to see which services are enabled
+
+ HDFS - localhost:50070
+ Hbase - localhost:60010
+ #Storm UI - localhost:8080      (currently disabled)
+ #Elasticsearch - localhost:9200 (currently disabled)
+
 ## Quick Start
 
 If you don't want to bother with the details of the cluster, and just want to see OpenSOC, place a RPM For Oracle's JVM in `resources/` and edit `common.sh` to set `JRE_RPM` to the name of the RPM. Then run:
@@ -35,6 +46,7 @@ To get the cluster up and running, do the following:
 * Place an RPM for Oracle's JVM in `resources/` and edit `common.sh` to set `JRE_RPM` to the name of the RPM
 * Run `vagrant up`
 * Run `fab vagrant postsetup`
+
 
 The `vagrant up` command will build the VMs for the cluster, and install all dependencies which include:
 

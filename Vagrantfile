@@ -33,11 +33,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.network "forwarded_port", guest: 8088, host:8088
 
                 # storm nimbus
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-storm.sh"
-                    s.args = "-r nimbus -t #{numNodes}"
-                end
-                node.vm.network "forwarded_port", guest: 8080, host: 8080
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-storm.sh"
+                #    s.args = "-r nimbus -t #{numNodes}"
+                #end
+                #node.vm.network "forwarded_port", guest: 8080, host: 8080
 
                 # hbase master
                 node.vm.provision "shell" do |s|
@@ -47,18 +47,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.network "forwarded_port", guest: 60010, host: 60010
 
                 # hive
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-hive.sh"
-                end
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-hive.sh"
+                #end
 
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-elasticsearch.sh"
-                    s.args = "-c -i 10.0.0.10#{i}"
-                end
-                node.vm.network "forwarded_port", guest: 9200, host:9200
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-elasticsearch.sh"
+                #    s.args = "-c -i 10.0.0.10#{i}"
+                #end
+                #node.vm.network "forwarded_port", guest: 9200, host:9200
 
                 # setup mysql for geo enrichment
-                node.vm.provision "shell", path: "scripts/setup-geo-enrichment.sh"
+                #node.vm.provision "shell", path: "scripts/setup-geo-enrichment.sh"
             else
                 # zookeeper
                 node.vm.provision "shell" do |s|
@@ -76,20 +76,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.args = "-r regionserver -t #{numNodes}"
                 end
                 # kafka broker
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-kafka.sh"
-                    s.args = "-t #{numNodes}"
-                end
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-kafka.sh"
+                #    s.args = "-t #{numNodes}"
+                #end
                 # storm supervisor
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-storm.sh"
-                    s.args = "-r supervisor -t #{numNodes}"
-                end
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-storm.sh"
+                #    s.args = "-r supervisor -t #{numNodes}"
+                #end
                 # elasticsearch
-                node.vm.provision "shell" do |s|
-                    s.path = "scripts/setup-elasticsearch.sh"
-                    s.args = "-i 10.0.0.10#{i}"
-                end
+                #node.vm.provision "shell" do |s|
+                #    s.path = "scripts/setup-elasticsearch.sh"
+                #    s.args = "-i 10.0.0.10#{i}"
+                #end
                 # reload supervisord
             end
 
