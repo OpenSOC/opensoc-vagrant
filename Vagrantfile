@@ -65,6 +65,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                     s.path = "scripts/setup-zookeeper.sh"
                     s.args = "-t #{numNodes}"
                 end
+		node.vm.network "forwarded_port", guest: 2181, host: 2181
+
                 # datanode
                 node.vm.provision "shell" do |s|
                     s.path = "scripts/setup-hadoop.sh"
