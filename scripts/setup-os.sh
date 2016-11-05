@@ -29,6 +29,7 @@ function installDependencies {
     yum install -y epel-release 
     yum install -y python-pip unzip
 
+    pip install setuptools --upgrade
     pip install supervisor
     pip install argparse
 

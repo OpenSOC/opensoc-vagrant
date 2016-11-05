@@ -13,60 +13,14 @@ Credit to https://github.com/vangj/vagrant-hadoop-2.4.1-spark-1.0.1 for the insp
 
 ## Quick Start
 
-If you don't want to bother with the details of the cluster, and just want to see OpenSOC, place a RPM For Oracle's JVM in `resources/` and edit `common.sh` to set `JRE_RPM` to the name of the RPM. Then run:
+ - Run `vagrant up`
+ - Run `fab vagrant postsetup`
 
-```
-vagrant up
-fab vagrant quickstart
-```
-
-Finally, point your browser at https://localhost:8443
-
-This should get you a running OpenSOC cluster with Bro, Snort, and PCAP. If you are looking to customize the setup or run your own topologies, see the secions below on running the cluster and running an OpenSOC Topology.
-
-## Advanced Setup
-
-If you are interested in tweaking the underlying cluster, running your own OpenSOC topology, or just want to understand how it all works, this section will break down how the cluster is started, and now topoogies can be run.
-
-## Running the cluster
-
-To get the cluster up and running, do the following:
-
-* Place an RPM for Oracle's JVM in `resources/` and edit `common.sh` to set `JRE_RPM` to the name of the RPM
-* Run `vagrant up`
-* Run `fab vagrant postsetup`
-
-The `vagrant up` command will build the VMs for the cluster, and install all dependencies which include:
-
-* Hadoop 2.6
-* Hbase 0.98
-* Kafka 0.8.1.1
-* Zookeeper 3.4.6
-* Hive 1.2.0
-* Elasticsearch 1.5.2
-* Storm 0.9.4
-
-After this, the `fab vagrant postsetup` command will run a handful of tasks that need to occur after the cluster is running, but before it can be used. These are:
-
-* Formatting HDFS
-* Starting Hadoop cluster
-* Starting HBase cluster
-* Setup Hbase whitelist table with RFC1918 addresses
-
-## Running an OpenSOC Topology
-
-After provisioning the cluster as described above, you can use some more fabric tasks to run a topology. Before you start, you should have the following:
-
-* opensoc-streaming repo cloned locally
-* a copy of OpenSOC configs in resources/opensoc/OpenSOC_Configs
-
-Then you can run `fab vagrant start_topology:<topology_name>` which will do the following:
-
-* cd into the opensoc-streaming repo, and run `mvn clean package`
-* copy the newly built OpenSOC-Topologies.jar to resources/opensoc, where it will be avilable to the VMs
-* Submit `<topology_name>` and the topology jar to Nimbus
-
-If your topology is pulling data from Kafka, you can create a topic with the fabric task `fab vagrant create_topic:<topic>`
+* Endpoints for different services. 
+ - HDFS - localhost:50070
+ - Hbase - localhost:60010
+ - Storm UI - localhost:8080      (currently disabled)
+ - Elasticsearch - localhost:9200 (currently disabled)
 
 ## Virtual Machines
 
@@ -75,19 +29,19 @@ By default, 4 VMs will be created. They are named node1, node2, node3, and node4
 * node1
   * HDFS Namenode
   * Yarn Resourcemanager
-  * Storm Nimbus and UI
+  * Storm Nimbus and UI (disabled)
   * HBase Master
-  * Elasticsearch Master
-  * MySql (Hive metastore and geo enrichment store)
+  * Elasticsearch Master (disabled)
+  * MySql (Hive metastore and geo enrichment store) (disabled)
 
 * node2-4
-  * Kafka Broker
+  * Kafka Broker (disabled)
   * Zookeeper
   * HDFS Datanode
   * YARN Nodemanager
-  * Storm Supervisor
-  * HBase Regionserver
-  * Elasticsearch Data Nodes
+  * Storm Supervisor (disabled)
+  * HBase Regionserver 
+  * Elasticsearch Data Nodes (disabled)
 
 ## Port Forwarding
 
@@ -95,9 +49,10 @@ Some service's UIs are forwarded to localhost for ease of use. You can find the 
 
 * HDFS - localhost:50070 -> node1:50070
 * Hbase - localhost:60010 -> node1:60010
-* Storm UI - localhost:8080 -> node1:8080
-* Elasticsearch - localhost:9200 -> node1:9200
-* OpenSOC-UI - localhost:8443 -> node1:443
+
+* Storm UI - localhost:8080 -> node1:8080 (disabled)
+* Elasticsearch - localhost:9200 -> node1:9200 (disabled)
+* OpenSOC-UI - localhost:8443 -> node1:443 (disabled)
 
 ## Progress
 
@@ -106,12 +61,25 @@ Here is a list of what will be provisioned via vagrant and its current status:
 * Java - DONE
 * Zookeeper - DONE
 * HDFS/Yarn - DONE
-* Kafka - DONE 
-* Storm - DONE
 * Hbase - DONE
-* Hive - DONE
-* Elasticsearch - DONE
-* GeoIP Enrichment Data - DONE
-* OpenSOC UI
-* OpenSOC Storm Topologies
 
+* Kafka - DONE (disabled)
+* Storm - DONE (disabled)
+* Hive - DONE (disabled)
+* Elasticsearch - DONE (disabled)
+* GeoIP Enrichment Data - DONE (disabled)
+* OpenSOC UI (disabled)
+* OpenSOC Storm Topologies (disabled)
+
+* Componets versions: 
+ - JRE_RPM=jre-8u112-linux-x64.rpm
+ - HADOOP_VERSION=hadoop-2.6.0
+ - ZOOKEEPER_VERSION=zookeeper-3.4.6
+ - KAFKA_SCALA_VERSION=2.9.2
+ - KAFKA_VERSION_NUM=0.8.1.1
+ - KAFKA_VERSION="kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION_NUM}"
+ - STORM_VERSION=apache-storm-0.9.4
+ - HBASE_VERSION_NUM=0.98.23
+ - HBASE_VERSION=hbase-"${HBASE_VERSION_NUM}-hadoop2"
+ - HIVE_VERSION=hive-1.2.1
+ - ES_VERSION=1.5.2
